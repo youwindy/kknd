@@ -1,4 +1,4 @@
-import { messgetype } from '../src/lib/types';
+import { Messgetype } from '../src/lib/types';
 const bot = '机器人';
 let choice = 1;
 const names = ['思知', '青云客']
@@ -30,21 +30,21 @@ export const rule = [
         fnc: 'aiChoose'
     }
 ]
-export async function aiHelp(e) {
+export async function aiHelp(e: Messgetype) {
     e.reply(`发送/ai选择+ai对应数字选择ai
         0.思知
         1.青云客`)
     return true
 }
 
-export async function aiChoose(e) {
+export async function aiChoose(e: Messgetype) {
     choice = parseInt(e.msg.content.replace('/ai选择', ''));
     e.reply(`切换成功,当前ai${names[choice]}`)
     return true
 }
 
 
-export async function testAi(e) {
+export async function testAi(e: Messgetype) {
     const lists = [
         'https://api.ownthink.com/bot?appid=xiaosi&userid=user&spoken=',
         'http://api.qingyunke.com/api.php?key=free&appid=0&msg=']
