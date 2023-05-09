@@ -1,4 +1,4 @@
-import { messgetype } from '../src/lib/types'
+import { Messgetype } from '../src/lib/types'
 
 /**
  * 指令集
@@ -21,7 +21,7 @@ export const rule = [
  * @returns
  * 一言 
  */
-export async function getText(e: messgetype) {
+export async function getText(e: Messgetype) {
   const api = 'http://api.guaqb.cn/v1/onesaid/';
   const res = await fetch(api);
   const text = await res.text();
