@@ -18,7 +18,7 @@ export const rule = [
  * 指令方法
  * @param e 消息对象
  * @returns
- * 一言 
+ * 天气
  */
 export async function getWeather(e: Messgetype) {
   const regex = /^\/(.*)天气$/;
