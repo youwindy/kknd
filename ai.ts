@@ -1,67 +1,70 @@
-import { Messgetype } from '../src/lib/types'
-/**
- * 指令集
- */
+import { Messgetype } from '../src/lib/types';
+
+// 触发词
+const bot = '思知';
+let choice = 0;
+const names = ['思知', '青云客']
+
 export const rule = [
-  {
-    name: '天气', //中文名
-    event: 'MESSAGES', //响应频道事件
-    eventType: 'CREATE', //创建类型
-    dsc: '^/(.*)天气$', //【命令】功能说明
-    priority: 5000, //优先级，越小优先度越高
-    reg: '^/(.*)天气$', //匹配消息正则，命令正则
-    fnc: 'getWeather' //函数
-  }
-]
-
-/**
- * 指令方法
- * @param e 消息对象
- * @returns
- * 一言 
- */
-export async function getWeather(e: Messgetype) {
-  const regex = /^\/(.*)天气$/;
-  const matchResult = e.cmd_msg.match(regex);
-  let address = '';
-  if (matchResult) {
-    address = matchResult[1];
-  } else {
-    e.reply('地址错误')
-  }
-
-  // 根据地址获取locationId
-  const key = '2091da0c93dc4b90a00803f0d5f61b32'
-  const address1 = await fetch(`https://geoapi.qweather.com/v2/city/lookup?location=${address}&key=${key}`)
-  const location = await address1.json()
-  
-  const locationId = location['location'][0]['id'];
-  // 获取天气信息
-  const api = `https://devapi.qweather.com/v7/weather/now?location=${locationId}&key=${key}`;
-  const res = await fetch(api);
-  const data = await res.json();
-
-  const centent = ''
-  const obj = {
-    embed: {
-      title: ` ${location['location'][0]['adm1']} ${location['location'][0]['adm2']}`,
-      prompt: `实时天气`,
-      thumbnail: {
-        url: ''
-      },
-      fields: [
-        {
-          name: `天气: ${data.now.text}`
-        },
-        {
-          name: `温度: ${data.now.temp}`
-        }, {
-          name: `风: ${data.now.windScale}级${data.now.windDir}`
-        }, {
-          name: `风速: ${data.now.windSpeed}`
-        }
-      ]
+    {
+        name: 'ai', //中文名
+        event: 'MESSAGES', //响应频道事件
+        eventType: 'CREATE', //创建类型
+        dsc: '机器人', //【命令】功能说明
+        priority: 5000, //优先级，越小优先度越高
+        reg: bot, //正则指令
+        fnc: 'testAi' //函数匹配10
+    }, {
+        name: 'ai帮助', //中文名
+        event: 'MESSAGES', //响应频道事件
+        eventType: 'CREATE', //创建类型
+        dsc: '/ai帮助', //【命令】功能说明
+        priority: 5000, //优先级，越小优先度越高
+        reg: '^/ai帮助$',
+        fnc: 'aiHelp'
+    }, {
+        name: 'ai选择', //中文名
+        event: 'MESSAGES', //响应频道事件
+        eventType: 'CREATE', //创建类型
+        dsc: '/ai选择', //【命令】功能说明
+        priority: 5000, //优先级，越小优先度越高
+        reg: '^/ai选择(.*)$',
+        fnc: 'aiChoose'
     }
-  }
-  e.reply(centent, obj)
+]
+export async function aiHelp(e: Messgetype) {
+    e.reply(`发送/ai选择+ai对应数字选择ai
+        0.思知
+        1.青云客`)
+    return true
+}
+// 切换ai
+export async function aiChoose(e: Messgetype) {
+    const message = e.cmd_msg;
+    choice = parseInt(message.replace(/\D/g, ''));
+    if (choice < names.length) {
+        e.reply(`切换成功,当前ai${names[choice]}`)
+    }
+    else {
+        choice = 0;
+        e.reply(`暂时没有那么多ai哦,已为您切换至${names[choice]}`);
+    }
+    return true
+}
+
+
+export async function testAi(e: Messgetype) {
+    const lists = [
+        'https://api.ownthink.com/bot?appid=xiaosi&userid=user&spoken=',
+        'http://api.qingyunke.com/api.php?key=free&appid=0&msg=']
+    const question = e.cmd_msg.replace(bot, '');
+    const response = await fetch(lists[choice] + question);
+    const answer = await response.json();
+    if (choice == 0) {
+        e.reply(answer.data.info.text)
+    }
+    else if (choice == 1) {
+        e.reply(answer['content'])
+    }
+    return true
 }
