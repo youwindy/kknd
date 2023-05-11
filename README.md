@@ -1,7 +1,7 @@
 # alemon-bot的一些小插件
 
 #### 介绍
-alemon-bot用插件，放到example文件夹即可使用
+alemon-bot用插件，放到`alemon-bot/program`文件夹即可使用
 
 #### ai插件
 默认ai为思知 默认触发词也是思知
