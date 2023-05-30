@@ -1,17 +1,13 @@
-import plugin from '../src/lib/plugins'
-import { EType, Messgetype, PluginType } from '../src/lib/types'
+import { plugin, Messagetype } from 'alemon'
 
 /**
  * 指令集
  */
-export class yiyan extends plugin {
-  [parameter: string]: PluginType
+export class oneWords extends plugin {
   constructor() {
     super({
       dsc: '/一言', //【命令】功能说明
       name: '一言', //中文名
-      event: EType.MESSAGES, //响应频道事件
-      eventType: 'CREATE', //创建类型
       rule: [
         {
           reg: '^/一言$', //匹配消息正则，命令正则
@@ -26,7 +22,7 @@ export class yiyan extends plugin {
    * @returns
    * 一言
    */
-  async getText(e: Messgetype) {
+  async getText(e: Messagetype) {
     const api = 'http://api.guaqb.cn/v1/onesaid/'
     const res = await fetch(api)
     const text = await res.text()

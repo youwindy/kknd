@@ -1,13 +1,9 @@
-import plugin from '../src/lib/plugins'
-import { EType, Messgetype, PluginType } from '../src/lib/types'
+import { plugin, Messagetype } from 'alemon'
 
 export class isrecall extends plugin {
-  [parameter: string]: PluginType
   constructor() {
     super({
       dsc: '引用撤回',
-      event: EType.MESSAGES,
-      eventType: 'CREATE',
       rule: [
         {
           reg: '^/撤回$',
@@ -17,7 +13,7 @@ export class isrecall extends plugin {
     })
   }
 
-  async recall(e: Messgetype) {
+  async recall(e: Messagetype) {
     const channelID = e.msg.channel_id
     const messageID = e.msg.message_reference.message_id
     const hideTip = true

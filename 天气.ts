@@ -1,15 +1,12 @@
-import plugin from '../src/lib/plugins'
-import { EType, Messgetype, PluginType } from '../src/lib/types'
+import { plugin, Messagetype, segment } from 'alemon'
+
 /**
  * 指令集
  */
 export class weather extends plugin {
-  [parameter: string]: PluginType
   constructor() {
     super({
       name: '天气',
-      event: EType.MESSAGES,
-      eventType: 'CREATE',
       dsc: '^/(.*)天气$',
       rule: [
         {
@@ -20,7 +17,7 @@ export class weather extends plugin {
     })
   }
 
-  async getWeather(e: Messgetype) {
+  async getWeather(e: Messagetype): Promise<boolean> {
     const regex = /^\/(.*)天气$/
     const matchResult = e.cmd_msg.match(regex)
     let address = ''
